@@ -1,0 +1,34 @@
+[
+  {
+    "technique_id": "T1059.001",
+    "playbook_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rule_hash": "sha256:4a5b6c7d8e9f0123456789abcdef0123456789abcdef0123456789abcdef0123",
+    "verdict": "Detected",
+    "evidence_ref": "ev-mod2-powershell-execution-alert-101",
+    "notes": "PowerShell command execution successfully triggered EDR rule EDR-WIN-042."
+  },
+  {
+    "technique_id": "T1003.001",
+    "playbook_hash": "sha256:a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef01",
+    "rule_hash": "sha256:5b6c7d8e9f0123456789abcdef0123456789abcdef0123456789abcdef01234a",
+    "verdict": "Missed",
+    "evidence_ref": "ev-mod2-lsass-memory-dump-failed-102",
+    "notes": "LSASS memory read was not flagged by sensor. Missing alert detection."
+  },
+  {
+    "technique_id": "T1047",
+    "playbook_hash": "sha256:6c7d8e9f0123456789abcdef0123456789abcdef0123456789abcdef01234a5b",
+    "rule_hash": "sha256:7d8e9f0123456789abcdef0123456789abcdef0123456789abcdef01234a5b6c",
+    "verdict": "Partial",
+    "evidence_ref": "ev-mod2-wmi-process-launch-partial-103",
+    "notes": "WMI execution detected in raw telemetry but failed to generate high severity alert."
+  },
+  {
+    "technique_id": "T1055.001",
+    "playbook_hash": "sha256:8e9f0123456789abcdef0123456789abcdef0123456789abcdef01234a5b6c7d",
+    "rule_hash": "sha256:9f0123456789abcdef0123456789abcdef0123456789abcdef01234a5b6c7d8e",
+    "verdict": "NoData",
+    "evidence_ref": "ev-mod2-dll-injection-nodata-104",
+    "notes": "Telemetry sensor offline during execution. Verdict is inconclusive."
+  }
+]

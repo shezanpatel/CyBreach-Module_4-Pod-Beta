@@ -1,0 +1,16 @@
+[
+  {
+    "playbook_id": "PB-WIN-001",
+    "title": "Credential Access via Memory Harvesting",
+    "playbook_hash": "sha256:a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef01",
+    "techniques": ["T1003.001", "T1055.001"],
+    "tier": "guided"
+  },
+  {
+    "playbook_id": "PB-WIN-002",
+    "title": "Execution and Lateral Movement via WMI",
+    "playbook_hash": "sha256:6c7d8e9f0123456789abcdef0123456789abcdef0123456789abcdef01234a5b",
+    "techniques": ["T1047", "T1059.001"],
+    "tier": "quick_scan"
+  }
+]
