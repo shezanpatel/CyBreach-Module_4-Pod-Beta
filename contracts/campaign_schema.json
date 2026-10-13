@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CampaignDefinition",
+  "type": "object",
+  "required": [
+    "campaign_id",
+    "title",
+    "tier",
+    "playbook_hashes",
+    "regions",
+    "techniques",
+    "credit_cost",
+    "content_hash"
+  ],
+  "properties": {
+    "campaign_id": { "type": "string" },
+    "title": { "type": "string" },
+    "tier": { 
+      "type": "string",
+      "enum": ["quick_scan", "guided", "audit", "boss_fight"]
+    },
+    "playbook_hashes": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "regions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "techniques": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "credit_cost": { "type": "integer", "minimum": 0 },
+    "content_hash": { "type": "string" }
+  }
+}

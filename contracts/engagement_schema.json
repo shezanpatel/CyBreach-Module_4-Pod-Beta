@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EngagementSession",
+  "type": "object",
+  "required": ["engagement_id", "tenant_id", "state", "engagement_type", "created_at"],
+  "properties": {
+    "engagement_id": { "type": "string" },
+    "tenant_id": { "type": "string" },
+    "state": { 
+      "type": "string",
+      "enum": ["created", "scoped", "executing", "completed", "archived"]
+    },
+    "engagement_type": { "type": "string" },
+    "scope": { "type": "object" },
+    "created_at": { "type": "string" },
+    "completed_at": { "type": ["string", "null"] }
+  }
+}
