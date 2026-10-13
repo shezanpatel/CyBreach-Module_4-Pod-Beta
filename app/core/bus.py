@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, List
 
 
@@ -11,7 +11,7 @@ class EventBus:
         event_message = {
             "topic": topic,
             "correlation_id": correlation_id or str(uuid.uuid4()),
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "payload": payload,
         }
         self.published_events.append(event_message)
