@@ -1,0 +1,27 @@
+{
+  "campaign_id": "CAMP-CONT-001",
+  "title": "Continuous Cloud Posture Validation",
+  "description": "Scheduled recurring assessment validating IAM hygiene and public object storage access.",
+  "playbook_hashes": [
+    "sha256:bb6a18ac3759af5c235b395a90013a16f43085d9a0a252d9d802b6deb94aeb7f",
+    "sha256:67bf789de20d13bf665ad22b49f281cf7273ee29a0ed68e2db26ec78404d6d20"
+  ],
+  "tier": "continuous",
+  "regions": [
+    "global"
+  ],
+  "techniques": [
+    "T1580",
+    "T1530"
+  ],
+  "regulations": [
+    "NIST",
+    "ISO27001",
+    "GDPR"
+  ],
+  "credit_cost": 15,
+  "asset_criticality": "medium",
+  "estimated_score_impact": 10.0,
+  "stages": [],
+  "content_hash": "sha256:62318ce2caf86a95a84dd8dee8bd9f8a2839779dfe63bf9deeb0b06179fb46ff"
+}

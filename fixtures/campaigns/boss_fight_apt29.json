@@ -1,0 +1,100 @@
+{
+  "campaign_id": "CAMP-APT29-001",
+  "title": "APT29 Emulation Campaign",
+  "description": "Simulates APT29 tradecraft: spear-phishing, credential harvesting, lateral movement via WMI, and data exfiltration via OneDrive.",
+  "playbook_hashes": [
+    "sha256:1614e4a7cb728e3510bc2d8aa1f29e74e8a75514edf22ba80ed3af77b46194e0",
+    "sha256:dc90f1398f2da023563bf897afda45e649a91e8f8ff2be4ce4523e5cb3908c27",
+    "sha256:7000f0b7c2640012cf0f81396d5d75faf21dbac3847286ebc2737837691b4ecd",
+    "sha256:69eb57e6ae714d1747fdeee5d2c689dfd5a274c31393032a66a1d94aad6dbdfb"
+  ],
+  "tier": "boss_fight",
+  "regions": [
+    "global",
+    "na",
+    "eu",
+    "apac"
+  ],
+  "techniques": [
+    "T1566.001",
+    "T1110.003",
+    "T1047",
+    "T1567.002"
+  ],
+  "regulations": [
+    "NIST",
+    "ISO27001"
+  ],
+  "credit_cost": 50,
+  "asset_criticality": "high",
+  "estimated_score_impact": 20.0,
+  "stages": [
+    {
+      "stage_id": "stage-apt29-1",
+      "stage_number": 1,
+      "title": "Initial Access: Spear-Phishing Delivery",
+      "description": "Adversary delivers weaponized lure attachment.",
+      "playbook_hashes": [
+        "sha256:1614e4a7cb728e3510bc2d8aa1f29e74e8a75514edf22ba80ed3af77b46194e0"
+      ],
+      "techniques": [
+        "T1566.001"
+      ],
+      "prerequisite_stage_ids": [],
+      "weight": 1.0,
+      "required_verdict": "Detected"
+    },
+    {
+      "stage_id": "stage-apt29-2",
+      "stage_number": 2,
+      "title": "Credential Access: Memory Dumping",
+      "description": "Adversary harvests credentials and dumps secrets.",
+      "playbook_hashes": [
+        "sha256:dc90f1398f2da023563bf897afda45e649a91e8f8ff2be4ce4523e5cb3908c27"
+      ],
+      "techniques": [
+        "T1110.003"
+      ],
+      "prerequisite_stage_ids": [
+        "stage-apt29-1"
+      ],
+      "weight": 1.5,
+      "required_verdict": "Detected"
+    },
+    {
+      "stage_id": "stage-apt29-3",
+      "stage_number": 3,
+      "title": "Lateral Movement: WMI Remote Execution",
+      "description": "Adversary pivots across internal hosts via WMI.",
+      "playbook_hashes": [
+        "sha256:7000f0b7c2640012cf0f81396d5d75faf21dbac3847286ebc2737837691b4ecd"
+      ],
+      "techniques": [
+        "T1047"
+      ],
+      "prerequisite_stage_ids": [
+        "stage-apt29-2"
+      ],
+      "weight": 1.5,
+      "required_verdict": "Detected"
+    },
+    {
+      "stage_id": "stage-apt29-4",
+      "stage_number": 4,
+      "title": "Exfiltration: Encrypted OneDrive Upload",
+      "description": "Adversary exfiltrates confidential staging archives.",
+      "playbook_hashes": [
+        "sha256:69eb57e6ae714d1747fdeee5d2c689dfd5a274c31393032a66a1d94aad6dbdfb"
+      ],
+      "techniques": [
+        "T1567.002"
+      ],
+      "prerequisite_stage_ids": [
+        "stage-apt29-3"
+      ],
+      "weight": 2.0,
+      "required_verdict": "Detected"
+    }
+  ],
+  "content_hash": "sha256:003d1dba880d7474720f039b0c613f1ccf4ccb5dc3c8fab9e8069b30efbe5b67"
+}

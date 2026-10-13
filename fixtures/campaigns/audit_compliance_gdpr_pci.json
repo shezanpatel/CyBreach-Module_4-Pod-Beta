@@ -1,0 +1,32 @@
+{
+  "campaign_id": "CAMP-AUDIT-001",
+  "title": "GDPR and PCI-DSS Regulatory Audit",
+  "description": "Comprehensive compliance audit assessing data protection controls and exfiltration pathways.",
+  "playbook_hashes": [
+    "sha256:147c266ff3a993329239ad28c49e77b393ee08be82fde02cf696bc3e9c662b5e",
+    "sha256:af293c14eed093cb799979fb1843fec7b7dea84e436e04d603f3432031a54d9d",
+    "sha256:5ad103274801603276e66dcf4e31506222d44e45b1678f3f80d1a7db46fbc00a",
+    "sha256:500b5a4d7b821b102d05903911407c974a1bd9fb548005604ea05749d223c93b"
+  ],
+  "tier": "audit",
+  "regions": [
+    "eu",
+    "apac"
+  ],
+  "techniques": [
+    "T1048",
+    "T1567",
+    "T1005",
+    "T1020"
+  ],
+  "regulations": [
+    "GDPR",
+    "PCI-DSS",
+    "ISO27001"
+  ],
+  "credit_cost": 100,
+  "asset_criticality": "high",
+  "estimated_score_impact": 15.0,
+  "stages": [],
+  "content_hash": "sha256:25c6011710b87e443399efd7db9d890a8773ff8bf85cdf2a243feb1ebea439a9"
+}

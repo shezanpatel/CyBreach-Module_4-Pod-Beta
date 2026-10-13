@@ -1,0 +1,24 @@
+{
+  "campaign_id": "CAMP-QS-001",
+  "title": "Perimeter Defense Fast Scan",
+  "description": "Rapid single-playbook verification of public-facing endpoints and attack surface exposure.",
+  "playbook_hashes": [
+    "sha256:9a4e2e5f211e30e6e4ed7fbf66f8024d623ac6e0b52d1481c233dff39e00d785"
+  ],
+  "tier": "quick_scan",
+  "regions": [
+    "global"
+  ],
+  "techniques": [
+    "T1190"
+  ],
+  "regulations": [
+    "NIST",
+    "ISO27001"
+  ],
+  "credit_cost": 5,
+  "asset_criticality": "low",
+  "estimated_score_impact": 3.0,
+  "stages": [],
+  "content_hash": "sha256:158b75b3bf46933db9a6abaaad6e3faf0ee92e1ae649e453c537d136b985a33a"
+}

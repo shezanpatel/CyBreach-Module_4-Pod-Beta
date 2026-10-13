@@ -1,0 +1,128 @@
+[
+  {
+    "playbook_id": "MOD1-PB-PERIMETER-001",
+    "name": "Public Perimeter Exposure Spot-Check",
+    "description": "Scans external-facing endpoints for misconfigurations and TLS vulnerabilities.",
+    "sha256_hash": "sha256:9a4e2e5f211e30e6e4ed7fbf66f8024d623ac6e0b52d1481c233dff39e00d785",
+    "techniques": ["T1190"]
+  },
+  {
+    "playbook_id": "MOD1-PB-RANSOM-ENC-001",
+    "name": "Data Encryption Simulation",
+    "description": "Simulates ransomware file encryption in a sandboxed staging directory.",
+    "sha256_hash": "sha256:16af858cfe50771c3b224459248965a9698439527b99de1dc0d3dafbcac4a218",
+    "techniques": ["T1486"]
+  },
+  {
+    "playbook_id": "MOD1-PB-RANSOM-STOP-002",
+    "name": "Service Termination Check",
+    "description": "Verifies host response when critical security services are requested to terminate.",
+    "sha256_hash": "sha256:1b4caeea753802acae392fc3b7657161ba0f0b27ee01d01db9bc1454c738c3c9",
+    "techniques": ["T1489"]
+  },
+  {
+    "playbook_id": "MOD1-PB-RANSOM-SHADOW-003",
+    "name": "Shadow Copy Deletion Attempt",
+    "description": "Tests telemetry detection for vssadmin shadow copy deletion attempts.",
+    "sha256_hash": "sha256:eb553ecc9901e9e4c937791af94ea23e9cc5c7ab9d9531ff52673741066ce7b0",
+    "techniques": ["T1490"]
+  },
+  {
+    "playbook_id": "MOD1-PB-AUDIT-DATA-001",
+    "name": "Unencrypted Data In Transit",
+    "description": "Tests audit detection for sensitive cardholder and PII data transmission.",
+    "sha256_hash": "sha256:147c266ff3a993329239ad28c49e77b393ee08be82fde02cf696bc3e9c662b5e",
+    "techniques": ["T1048"]
+  },
+  {
+    "playbook_id": "MOD1-PB-AUDIT-EXFIL-002",
+    "name": "Cloud Storage Exfiltration Path",
+    "description": "Evaluates outbound exfiltration detection across multi-cloud object stores.",
+    "sha256_hash": "sha256:af293c14eed093cb799979fb1843fec7b7dea84e436e04d603f3432031a54d9d",
+    "techniques": ["T1567"]
+  },
+  {
+    "playbook_id": "MOD1-PB-AUDIT-CRED-003",
+    "name": "Credential Store Access",
+    "description": "Validates alerting on local credential database and vault access attempts.",
+    "sha256_hash": "sha256:5ad103274801603276e66dcf4e31506222d44e45b1678f3f80d1a7db46fbc00a",
+    "techniques": ["T1005"]
+  },
+  {
+    "playbook_id": "MOD1-PB-AUDIT-NET-004",
+    "name": "Egress Traffic Redirection",
+    "description": "Simulates DNS tunneling and non-standard egress port forwarding.",
+    "sha256_hash": "sha256:500b5a4d7b821b102d05903911407c974a1bd9fb548005604ea05749d223c93b",
+    "techniques": ["T1020"]
+  },
+  {
+    "playbook_id": "MOD1-PB-APT29-PHISH-001",
+    "name": "Spear-Phishing Attachment Emulation",
+    "description": "Delivers benign macro-enabled lure document simulating initial breach vector.",
+    "sha256_hash": "sha256:1614e4a7cb728e3510bc2d8aa1f29e74e8a75514edf22ba80ed3af77b46194e0",
+    "techniques": ["T1566.001"]
+  },
+  {
+    "playbook_id": "MOD1-PB-APT29-CRED-002",
+    "name": "Password Spraying and Credential Dumping",
+    "description": "Exercises LSASS memory read inspection and low-and-slow authentication spray.",
+    "sha256_hash": "sha256:dc90f1398f2da023563bf897afda45e649a91e8f8ff2be4ce4523e5cb3908c27",
+    "techniques": ["T1110.003"]
+  },
+  {
+    "playbook_id": "MOD1-PB-APT29-WMI-003",
+    "name": "Lateral Movement via WMI Execution",
+    "description": "Triggers remote process execution using WMI across enterprise segments.",
+    "sha256_hash": "sha256:7000f0b7c2640012cf0f81396d5d75faf21dbac3847286ebc2737837691b4ecd",
+    "techniques": ["T1047"]
+  },
+  {
+    "playbook_id": "MOD1-PB-APT29-EXFIL-004",
+    "name": "Data Exfiltration via Cloud Storage (OneDrive)",
+    "description": "Simulates archival staging and encrypted upload to commercial cloud storage.",
+    "sha256_hash": "sha256:69eb57e6ae714d1747fdeee5d2c689dfd5a274c31393032a66a1d94aad6dbdfb",
+    "techniques": ["T1567.002"]
+  },
+  {
+    "playbook_id": "MOD1-PB-FIN7-PHISH-001",
+    "name": "Spearphishing Link Delivery",
+    "description": "Simulates deceptive link navigation targeting point-of-sale staff.",
+    "sha256_hash": "sha256:f00f88f2b999ca94c4a043eabbf3b9385cade048442126b14a1326a7885cbe67",
+    "techniques": ["T1566.002"]
+  },
+  {
+    "playbook_id": "MOD1-PB-FIN7-CMD-002",
+    "name": "Windows Command Shell Scripting",
+    "description": "Executes obfuscated command shell scripts for discovery and staging.",
+    "sha256_hash": "sha256:c38b5a9e7bf4fd18b51b4cf43c3d52ecde2f6c1fcae4eb9aec2916c100fae34c",
+    "techniques": ["T1059.003"]
+  },
+  {
+    "playbook_id": "MOD1-PB-FIN7-INJECT-003",
+    "name": "Process Injection into Legitimate Binaries",
+    "description": "Simulates DLL injection into explorer process for persistence.",
+    "sha256_hash": "sha256:dd65a5c30ec9b4232cde208bd6690bab4884460232cc44d18b93e809f345c729",
+    "techniques": ["T1055"]
+  },
+  {
+    "playbook_id": "MOD1-PB-FIN7-EXFIL-004",
+    "name": "Exfiltration Over C2 Channel",
+    "description": "Simulates credit card data staging and transmission over encrypted C2 beacon.",
+    "sha256_hash": "sha256:d89ca31024099f2561ca808d1b4ac612414b3570e32d52593fece50d6091e2a7",
+    "techniques": ["T1041"]
+  },
+  {
+    "playbook_id": "MOD1-PB-CLOUD-ENUM-001",
+    "name": "Cloud Infrastructure Discovery",
+    "description": "Scans IAM role permissions and security group configurations.",
+    "sha256_hash": "sha256:bb6a18ac3759af5c235b395a90013a16f43085d9a0a252d9d802b6deb94aeb7f",
+    "techniques": ["T1580"]
+  },
+  {
+    "playbook_id": "MOD1-PB-CLOUD-DATA-002",
+    "name": "Cloud Storage Object Extraction",
+    "description": "Attempts unauthenticated listing of multi-region cloud object storage buckets.",
+    "sha256_hash": "sha256:67bf789de20d13bf665ad22b49f281cf7273ee29a0ed68e2db26ec78404d6d20",
+    "techniques": ["T1530"]
+  }
+]

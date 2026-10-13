@@ -1,0 +1,29 @@
+{
+  "campaign_id": "CAMP-GUIDED-001",
+  "title": "Ransomware Readiness Assessment",
+  "description": "Guided multi-playbook campaign validating detection coverage against ransomware behavior.",
+  "playbook_hashes": [
+    "sha256:16af858cfe50771c3b224459248965a9698439527b99de1dc0d3dafbcac4a218",
+    "sha256:1b4caeea753802acae392fc3b7657161ba0f0b27ee01d01db9bc1454c738c3c9",
+    "sha256:eb553ecc9901e9e4c937791af94ea23e9cc5c7ab9d9531ff52673741066ce7b0"
+  ],
+  "tier": "guided",
+  "regions": [
+    "na",
+    "eu"
+  ],
+  "techniques": [
+    "T1486",
+    "T1489",
+    "T1490"
+  ],
+  "regulations": [
+    "NIST",
+    "PCI-DSS"
+  ],
+  "credit_cost": 25,
+  "asset_criticality": "medium",
+  "estimated_score_impact": 8.0,
+  "stages": [],
+  "content_hash": "sha256:d7c331daa1abcfc21714ea53341b14d20305af760cf15b917106cb68174df98f"
+}

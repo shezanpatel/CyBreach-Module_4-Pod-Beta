@@ -1,0 +1,99 @@
+{
+  "campaign_id": "CAMP-FIN7-001",
+  "title": "FIN7 Financial Syndicate Boss Fight",
+  "description": "Multi-stage advanced emulation simulating FIN7 point-of-sale targeting, script execution, memory injection, and cardholder data exfiltration.",
+  "playbook_hashes": [
+    "sha256:f00f88f2b999ca94c4a043eabbf3b9385cade048442126b14a1326a7885cbe67",
+    "sha256:c38b5a9e7bf4fd18b51b4cf43c3d52ecde2f6c1fcae4eb9aec2916c100fae34c",
+    "sha256:dd65a5c30ec9b4232cde208bd6690bab4884460232cc44d18b93e809f345c729",
+    "sha256:d89ca31024099f2561ca808d1b4ac612414b3570e32d52593fece50d6091e2a7"
+  ],
+  "tier": "boss_fight",
+  "regions": [
+    "na",
+    "eu",
+    "apac"
+  ],
+  "techniques": [
+    "T1566.002",
+    "T1059.003",
+    "T1055",
+    "T1041"
+  ],
+  "regulations": [
+    "PCI-DSS",
+    "NIST"
+  ],
+  "credit_cost": 75,
+  "asset_criticality": "critical",
+  "estimated_score_impact": 25.0,
+  "stages": [
+    {
+      "stage_id": "stage-fin7-1",
+      "stage_number": 1,
+      "title": "Initial Lure: Spearphishing Link",
+      "description": "Deceptive invoice navigation targeting POS operators.",
+      "playbook_hashes": [
+        "sha256:f00f88f2b999ca94c4a043eabbf3b9385cade048442126b14a1326a7885cbe67"
+      ],
+      "techniques": [
+        "T1566.002"
+      ],
+      "prerequisite_stage_ids": [],
+      "weight": 1.0,
+      "required_verdict": "Detected"
+    },
+    {
+      "stage_id": "stage-fin7-2",
+      "stage_number": 2,
+      "title": "Execution: Obfuscated PowerShell Shell",
+      "description": "Execution of encoded commands for environment reconnaissance.",
+      "playbook_hashes": [
+        "sha256:c38b5a9e7bf4fd18b51b4cf43c3d52ecde2f6c1fcae4eb9aec2916c100fae34c"
+      ],
+      "techniques": [
+        "T1059.003"
+      ],
+      "prerequisite_stage_ids": [
+        "stage-fin7-1"
+      ],
+      "weight": 1.5,
+      "required_verdict": "Detected"
+    },
+    {
+      "stage_id": "stage-fin7-3",
+      "stage_number": 3,
+      "title": "Defense Evasion: Process Memory Injection",
+      "description": "In-memory code injection to evade signature detection.",
+      "playbook_hashes": [
+        "sha256:dd65a5c30ec9b4232cde208bd6690bab4884460232cc44d18b93e809f345c729"
+      ],
+      "techniques": [
+        "T1055"
+      ],
+      "prerequisite_stage_ids": [
+        "stage-fin7-2"
+      ],
+      "weight": 2.0,
+      "required_verdict": "Detected"
+    },
+    {
+      "stage_id": "stage-fin7-4",
+      "stage_number": 4,
+      "title": "Impact & Exfil: Encrypted C2 Beacon Exfiltration",
+      "description": "Exfiltration of captured credit card data over covert C2 channel.",
+      "playbook_hashes": [
+        "sha256:d89ca31024099f2561ca808d1b4ac612414b3570e32d52593fece50d6091e2a7"
+      ],
+      "techniques": [
+        "T1041"
+      ],
+      "prerequisite_stage_ids": [
+        "stage-fin7-3"
+      ],
+      "weight": 2.5,
+      "required_verdict": "Detected"
+    }
+  ],
+  "content_hash": "sha256:aed0f3a6618de0f3291d9cadf40f4b742a07a9af7e50d2da027737aca1718127"
+}
