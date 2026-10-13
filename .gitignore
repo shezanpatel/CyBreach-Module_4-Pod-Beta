@@ -9,3 +9,4 @@ env/
 *.log
 .coverage
 htmlcov/
+module4_arena.db 
