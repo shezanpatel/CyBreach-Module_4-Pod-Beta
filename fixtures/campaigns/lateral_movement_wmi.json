@@ -1,0 +1,14 @@
+{
+  "campaign_id": "CAMP-WMI-003",
+  "title": "WMI Lateral Movement and Execution",
+  "description": "Tests telemetry detection and alert generation when adversaries utilize Windows Management Instrumentation for remote command execution.",
+  "playbook_hashes": [
+    "sha256:3344556677889900aabbccddeeff0011223344556677889900aabbccddeeff1122"
+  ],
+  "tier": "quick_scan",
+  "regions": ["global", "apac", "eu", "na"],
+  "techniques": ["T1047", "T1059.001"],
+  "regulations": ["NIST", "ISO27001"],
+  "credit_cost": 5,
+  "asset_criticality": "medium"
+}

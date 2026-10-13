@@ -6,15 +6,30 @@ Run:
 
 import asyncio
 import json
-from app.engagement.api import repo, wallet, cooldown, event_bus
-from app.engagement.models import LaunchTier, CreateEngagementRequest, UpdateScopeRequest, CompleteEngagementRequest
-from app.engagement.api import create_engagement, update_engagement_scope, execute_engagement, complete_engagement, archive_engagement
-from app.engagement.report_generator import ReportGenerator
+from app.engagement.api import (
+    repo,
+    wallet,
+    cooldown,
+    event_bus,
+    create_engagement,
+    update_engagement_scope,
+    execute_engagement,
+    complete_engagement,
+    archive_engagement,
+    revalidate_engagement_technique,
+    get_engagement_recommendations,
+)
+from app.engagement.models import (
+    CreateEngagementRequest,
+    UpdateScopeRequest,
+    CompleteEngagementRequest,
+    RevalidationRequest,
+)
 
 
 async def run_demo():
     print("=" * 70)
-    print("CYBREACH MODULE 4: ARENA - POD BETA INTERACTIVE DEMO")
+    print("CYBREACH MODULE 4: ARENA - POD BETA INTERACTIVE DEMO (WEEKS 1 - 11)")
     print("=" * 70)
 
     tenant_id = "tenant_high"
@@ -58,7 +73,7 @@ async def run_demo():
         await update_engagement_scope(eng_id, UpdateScopeRequest(scope_manifest=huge_scope, confirmed=False))
         print("    [ERROR] Guardrail failed to trigger!")
     except Exception as e:
-        print(f"    - Guardrail Active: Expansion successfully blocked without confirmation!")
+        print("    - Guardrail Active: Expansion successfully blocked without confirmation!")
         print(f"    - Guardrail Detail: {e.detail}")
 
     # Step 3: Execute Engagement
@@ -86,15 +101,39 @@ async def run_demo():
 
     if report["refund"]["eligible"]:
         print("\n[6] INCONCLUSIVE VERDICT REFUND TRIGGERED:")
-        print(f"    - Refund Eligible: YES")
+        print("    - Refund Eligible: YES")
         print(f"    - Credits Refunded: {report['refund']['refund_amount']}")
         print(f"    - Reason: {report['refund']['reason']}")
         print(f"    - Refund Idempotency Key: {report['refund']['refund_idempotency_key']}")
         bal_final = await wallet.get_balance(tenant_id)
         print(f"    - Wallet Balance After Refund: {bal_final} credits")
 
-    # Step 5: Archive
-    print("\n[7] ARCHIVING ENGAGEMENT (Terminal State)...")
+    # Step 5: Week 11 Feature - One-Click Re-Validation Flow
+    print("\n[7] WEEK 11 FEATURE: ONE-CLICK RE-VALIDATION...")
+    print("    - Tenant remediated SIEM detection rule for Missed technique 'T1003.001'.")
+    reval_res = await revalidate_engagement_technique(
+        eng_id,
+        RevalidationRequest(technique_id="T1003.001", notes="SIEM LSASS detection rule tuned and deployed."),
+    )
+    print(f"    - Re-validation Engagement ID: {reval_res.revalidation_engagement_id}")
+    print(f"    - State: {reval_res.state.value.upper()} (Ready for instant execution)")
+    print(f"    - Targeted Technique: {reval_res.target_technique}")
+    print(f"    - Re-validation Cost: {reval_res.credit_cost} credits debited")
+    bal_after_reval = await wallet.get_balance(tenant_id)
+    print(f"    - Wallet Balance: {bal_after_reval} credits")
+
+    # Step 6: Week 11 Feature - Next Campaign Recommendation Engine
+    print("\n[8] WEEK 11 FEATURE: GAP ANALYSIS RECOMMENDATION ENGINE...")
+    recs_res = await get_engagement_recommendations(tenant_id, limit=3)
+    print(f"    - Unresolved Gaps Identified: {recs_res.unresolved_gap_count} ({', '.join(recs_res.unresolved_gaps)})")
+    print("    - Recommended Next Campaigns from Catalog:")
+    for idx, rec in enumerate(recs_res.recommendations, 1):
+        print(f"      {idx}. [{rec.campaign_id}] {rec.title} ({rec.tier.upper()}, {rec.credit_cost} cr)")
+        print(f"         Impact Score: {rec.impact_score} | Addresses Gaps: {rec.addressed_gaps}")
+        print(f"         Reason: {rec.reason}")
+
+    # Step 7: Archive
+    print("\n[9] ARCHIVING PARENT ENGAGEMENT (Terminal State)...")
     arch_res = await archive_engagement(eng_id)
     print(f"    - Updated State: {arch_res.state.value.upper()}")
     print(f"    - Archived At: {arch_res.archived_at}")
@@ -107,12 +146,12 @@ async def run_demo():
 
     # Event Bus Check
     events = event_bus.get_published_events()
-    print(f"\n[8] EVENT BUS AUDIT TRAIL ({len(events)} events emitted to 'engagement.lifecycle'):")
+    print(f"\n[10] EVENT BUS AUDIT TRAIL ({len(events)} events emitted):")
     for ev in events:
-        print(f"    - [{ev.timestamp[11:19]}] Topic: {ev.topic} | Type: {ev.event_type:<22} | CorrKey: {ev.correlation_key}")
+        print(f"    - [{ev.timestamp[11:19]}] Topic: {ev.topic:<20} | Type: {ev.event_type:<32} | CorrKey: {ev.correlation_key}")
 
     print("\n" + "=" * 70)
-    print("DEMO COMPLETE: ALL GUARDRAILS, TIERS, AND LIFECYCLE FLOWS VALIDATED")
+    print("DEMO COMPLETE: WEEKS 1 - 11 CAPABILITIES VALIDATED SUCCESSFULLY")
     print("=" * 70)
 
 

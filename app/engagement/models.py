@@ -157,3 +157,23 @@ class EngagementResponse(BaseModel):
     archived_at: Optional[datetime] = None
     report: Optional[Dict[str, Any]] = None
     warning: Optional[str] = None
+
+
+class RevalidationRequest(BaseModel):
+    """Request payload to initiate a one-click re-validation for a missed technique."""
+    technique_id: str
+    notes: Optional[str] = None
+
+
+class RevalidationResponse(BaseModel):
+    """Response payload for a newly spawned re-validation engagement."""
+    revalidation_engagement_id: str
+    parent_engagement_id: str
+    tenant_id: str
+    target_technique: str
+    credit_cost: int = 3
+    state: EngagementState
+    scope: Dict[str, Any]
+    created_at: datetime
+    message: str
+

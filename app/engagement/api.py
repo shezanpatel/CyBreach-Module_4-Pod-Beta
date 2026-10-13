@@ -28,8 +28,11 @@ from app.engagement.models import (
     TIER_CREDIT_COSTS,
     UpdateScopeRequest,
     CompleteEngagementRequest,
+    RevalidationRequest,
+    RevalidationResponse,
     parse_launch_tier,
 )
+from pathlib import Path
 from app.engagement.state_machine import (
     EngagementStateMachine,
     InvalidStateTransitionError,
@@ -46,6 +49,7 @@ from app.engagement.guardrails import (
 from app.engagement.report_generator import ReportGenerator, SummaryReport
 from app.engagement.mock_wallet import MockWalletClient, WalletInsufficientCreditsError
 from app.engagement.event_bus import EventBus
+from app.engagement.recommendations import RecommendationEngine, RecommendationResponse
 
 
 class EngagementRepository:
@@ -79,6 +83,8 @@ repo = EngagementRepository()
 wallet = MockWalletClient(seed_tenants=True)
 cooldown = CooldownChecker()
 event_bus = EventBus()
+campaigns_dir = Path(__file__).resolve().parent.parent.parent / "fixtures" / "campaigns"
+recommendation_engine = RecommendationEngine(campaigns_dir=campaigns_dir)
 
 
 @app.post("/engagement/create", response_model=EngagementResponse, status_code=status.HTTP_201_CREATED)
@@ -489,3 +495,146 @@ async def get_engagement_report(id: str):
             detail=f"No report available for engagement '{id}'. State: {engagement.state.value}",
         )
     return engagement.report
+
+
+@app.post("/engagement/{id}/revalidate", response_model=RevalidationResponse, status_code=status.HTTP_201_CREATED)
+async def revalidate_engagement_technique(id: str, req: RevalidationRequest):
+    """Trigger one-click re-validation for a previously missed technique.
+
+    Week 11 Deliverable (PRD Section 7.2 & 9.1):
+    1. Validates parent engagement exists and has completed outcomes.
+    2. Verifies the technique was tested and produced a gap (Missed or Partial).
+    3. Debits 3 credits from tenant wallet with idempotency key mod4:{reval_eng_id}.
+       Aborts with HTTP 402 if balance is insufficient.
+    4. Creates a new targeted engagement in SCOPED state ready for execution.
+    5. Emits lifecycle event and triggers Module 1 playbook re-run.
+    """
+    engagement = repo.get(id)
+    if not engagement:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Parent engagement '{id}' not found",
+        )
+
+    if not engagement.report:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Parent engagement '{id}' does not have completed validation outcomes.",
+        )
+
+    # Check outcomes for requested technique
+    tech_results = engagement.report.get("technique_results", [])
+    matched_verdict = None
+    matched_playbook = None
+
+    for item in tech_results:
+        if item.get("technique_id") == req.technique_id:
+            matched_verdict = item.get("verdict")
+            matched_playbook = item.get("playbook_hash")
+            break
+
+    if not matched_verdict:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Technique '{req.technique_id}' was not tested in parent engagement '{id}'.",
+        )
+
+    # Normalization
+    v_str = matched_verdict.value if hasattr(matched_verdict, "value") else str(matched_verdict)
+    if v_str == "Detected":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                f"Technique '{req.technique_id}' was already validated as Detected. "
+                f"Re-validation is only permitted for gap techniques (Missed or Partial)."
+            ),
+        )
+
+    # Debit wallet: 3 credits per re-validation (PRD Section 9.1)
+    reval_cost = 3
+    reval_eng_id = f"eng-reval-{uuid.uuid4().hex[:10]}"
+    idempotency_key = f"mod4:{reval_eng_id}"
+
+    try:
+        await wallet.debit(
+            tenant_id=engagement.tenant_id,
+            amount=reval_cost,
+            idempotency_key=idempotency_key,
+            reason=f"One-click re-validation for technique {req.technique_id}",
+            module_source="mod4",
+        )
+    except WalletInsufficientCreditsError as e:
+        raise HTTPException(
+            status_code=status.HTTP_402_PAYMENT_REQUIRED,
+            detail=f"Need {e.cost} credits, have {e.balance}",
+        )
+
+    now = datetime.now(timezone.utc)
+    reval_scope = {
+        "techniques": [req.technique_id],
+        "target_count": 1,
+        "playbook_hashes": [matched_playbook] if matched_playbook else [],
+        "revalidation_of": id,
+        "revalidation_target": req.technique_id,
+        "notes": req.notes or "",
+    }
+
+    # Newly spawned re-validation engagement is directly in SCOPED state
+    reval_engagement = Engagement(
+        engagement_id=reval_eng_id,
+        tenant_id=engagement.tenant_id,
+        state=EngagementState.SCOPED,
+        engagement_type=LaunchTier.QUICK_SCAN,
+        scope=reval_scope,
+        original_scope=reval_scope,
+        credit_cost=reval_cost,
+        created_at=now,
+        updated_at=now,
+        metadata={"parent_engagement_id": id, "type": "revalidation"},
+    )
+
+    repo.save(reval_engagement)
+
+    # Publish lifecycle event and trigger Module 1 re-run playbook
+    await event_bus.publish_engagement_lifecycle(
+        event_type="engagement.revalidation.created",
+        engagement_id=reval_eng_id,
+        tenant_id=engagement.tenant_id,
+        state=EngagementState.SCOPED.value,
+        engagement_type="revalidation",
+        details={
+            "target_technique": req.technique_id,
+            "parent_engagement_id": id,
+            "playbook_hash": matched_playbook,
+            "credit_cost": reval_cost,
+        },
+    )
+
+    return RevalidationResponse(
+        revalidation_engagement_id=reval_eng_id,
+        parent_engagement_id=id,
+        tenant_id=engagement.tenant_id,
+        target_technique=req.technique_id,
+        credit_cost=reval_cost,
+        state=reval_engagement.state,
+        scope=reval_scope,
+        created_at=now,
+        message=f"Re-validation engagement initialized and scoped for technique {req.technique_id}.",
+    )
+
+
+@app.get("/engagement/recommendations/{tenant_id}", response_model=RecommendationResponse)
+async def get_engagement_recommendations(tenant_id: str, limit: int = 5):
+    """Suggest most impactful next campaigns based on tenant gap analysis.
+
+    Week 11 Deliverable (PRD Section 7.2):
+    Analyzes historical Module 2 outcomes across tenant engagements, discovers unclosed
+    gaps (Missed/Partial), and returns ranked campaigns to remediate those gaps.
+    """
+    tenant_engagements = repo.list_by_tenant(tenant_id)
+    return recommendation_engine.get_recommendations(
+        tenant_id=tenant_id,
+        engagements=tenant_engagements,
+        limit=limit,
+    )
+

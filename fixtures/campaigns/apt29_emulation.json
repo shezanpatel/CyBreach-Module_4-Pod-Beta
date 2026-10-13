@@ -1,0 +1,17 @@
+{
+  "campaign_id": "CAMP-APT29-001",
+  "title": "APT29 Emulation Campaign",
+  "description": "Simulates APT29 tradecraft: spear-phishing, credential harvesting, lateral movement via WMI, and data exfiltration via OneDrive.",
+  "playbook_hashes": [
+    "sha256:a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef01",
+    "sha256:d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef01234a5b",
+    "sha256:g7h8i90123456789abcdef0123456789abcdef0123456789abcdef01234a5b6c7d",
+    "sha256:j0k1l20123456789abcdef0123456789abcdef0123456789abcdef01234a5b6c7e"
+  ],
+  "tier": "boss_fight",
+  "regions": ["global", "na", "eu", "apac"],
+  "techniques": ["T1566.001", "T1110.003", "T1047", "T1567.002"],
+  "regulations": ["NIST", "ISO27001"],
+  "credit_cost": 50,
+  "asset_criticality": "high"
+}

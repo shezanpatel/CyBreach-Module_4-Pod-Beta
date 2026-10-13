@@ -1,0 +1,15 @@
+{
+  "campaign_id": "CAMP-RANSOM-002",
+  "title": "Ransomware Readiness and Defense Efficacy",
+  "description": "Validates enterprise resistance against ransomware infection stages including credential access and endpoint defense evasion.",
+  "playbook_hashes": [
+    "sha256:11223344556677889900aabbccddeeff0011223344556677889900aabbccddeeff",
+    "sha256:223344556677889900aabbccddeeff0011223344556677889900aabbccddeeff11"
+  ],
+  "tier": "guided",
+  "regions": ["global", "na", "eu"],
+  "techniques": ["T1003.001", "T1059.001", "T1486"],
+  "regulations": ["NIST", "PCI-DSS"],
+  "credit_cost": 25,
+  "asset_criticality": "high"
+}
